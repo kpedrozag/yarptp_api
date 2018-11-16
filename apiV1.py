@@ -8,6 +8,7 @@ app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 app.one_request = True
 app.proto = None
+app.base_url = '/api/v1'
 
 
 def execute(direc, sp, mot, tm=0):
@@ -121,7 +122,7 @@ def index():
         return jsonify(code=200, message='Welcome to the API. Go to the documentation for help')
 
 
-@app.route('/api/v1/login')
+@app.route(app.base_url + '/login')
 def login():
     if app.one_request:
         # Primer usuario
@@ -135,10 +136,10 @@ def login():
             return jsonify(code=403, message='There is already a logged user')
 
 
-@app.route('/api/v1/move/<string:motor>/<string:direction>')
-@app.route('/api/v1/move/<string:motor>/<string:direction>/<float:time>')
-@app.route('/api/v1/move/<string:motor>/<string:direction>/<int:speed>')
-@app.route('/api/v1/move/<string:motor>/<string:direction>/<int:speed>/<float:time>')
+@app.route(app.base_url + '/move/<string:motor>/<string:direction>')
+@app.route(app.base_url + '/move/<string:motor>/<string:direction>/<float:time>')
+@app.route(app.base_url + '/move/<string:motor>/<string:direction>/<int:speed>')
+@app.route(app.base_url + '/move/<string:motor>/<string:direction>/<int:speed>/<float:time>')
 def movement(motor, direction, speed=None, time=0):
     if speed is not None:
         if not (0 <= speed <= 100):
@@ -168,20 +169,47 @@ def movement(motor, direction, speed=None, time=0):
                 return jsonify(code=404, message='This action does not exist. Please, go to the documentation for help')
 
 
-@app.route('/api/v1/stop')
-@app.route('/api/v1/stop/<motor>')
+@app.route(app.base_url + '/turn/<string:side>')
+def turns(side):
+    if side == 'left':
+        app.proto.TurnLeft()
+        return jsonify(code=200, message='Turning left the robot')
+    elif side == 'right':
+        app.proto.TurnRight()
+        return jsonify(code=200, message='Turning right the robot')
+    else:
+        return jsonify(code=400, message='You are using a wrong turn instruction. Please, go to the documentation for help')
+
+
+@app.route(app.base_url + '/move_step/<string:direction>')
+def step(direction):
+    if direction == 'forward':
+        app.proto.ForwardStep()
+        return jsonify(code=200, message='Moving one step in forward')
+    elif direction == 'reverse':
+        app.proto.ReverseStep()
+        return jsonify(code=200, message='Moving one step in reverse')
+    else:
+        return jsonify(code=400, message='You are using a wrong direction instruction. Please, go to the documentation for help')
+
+
+@app.route(app.base_url + '/stop')
+@app.route(app.base_url + '/stop/<motor>')
 def stop(motor=None):
     if motor is None:
+        app.proto.StopAll()
         return jsonify(code=200, message='Stopping both motors')
     elif motor == 'left':
+        app.proto.StopMotorL()
         return jsonify(code=200, message='Stopping left motor')
     elif motor == 'right':
+        app.proto.StopMotorR()
         return jsonify(code=200, message='Stopping right motor')
     else:
         return jsonify(code=404, message='This action does not exist. Please, go to the documentation for help')
 
 
-@app.route('/api/v1/logout')
+@app.route(app.base_url + '/logout')
 def logout():
     if 'token' in session:
         # remove the username from the session if it's there
