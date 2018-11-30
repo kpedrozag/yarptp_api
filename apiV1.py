@@ -119,9 +119,10 @@ def index():
 def login():
     if app.one_request:
         # Primer usuario
-        app.token = hashlib.md5(str(randrange(2**15)).encode()).hexdigest()
+        gen = hashlib.md5(str(randrange(2**15)).encode()).hexdigest()
+        app.token = str(gen)
         app.one_request = False
-        #app.proto = YarpTp()
+        # app.proto = YarpTp()
     if not app.one_request:
         try:
             return jsonify(code=200, token=app.token)
@@ -204,13 +205,9 @@ def step(direction):
                        url=url_for('login'))
 
 
-@app.route(app.base_url + '/stop')
-@app.route(app.base_url + '/stop/<motor>')
-def stop(motor=None):
-    tk = request.args.get('token')
-    if tk == app.token:
+"""
         if motor is None:
-            #app.proto.StopAll()
+            #app.proto.Stop()
             return jsonify(code=200, message='Stopping both motors')
         elif motor == 'left':
             #app.proto.StopMotorL()
@@ -220,6 +217,17 @@ def stop(motor=None):
             return jsonify(code=200, message='Stopping right motor')
         else:
             return jsonify(code=404, message='This action does not exist. Please, go to the documentation for help')
+"""
+
+
+# @app.route(app.base_url + '/stop/<motor>')
+# def stop(motor=None):
+@app.route(app.base_url + '/stop')
+def stop():
+    tk = request.args.get('token')
+    if tk == app.token:
+        #app.proto.Stop()
+        return jsonify(code=200, message='Stopping motors')
     else:
         return jsonify(code=401,
                        message='You are unauthorized to perform this action. Please, Log in in the URL',
