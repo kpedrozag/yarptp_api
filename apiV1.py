@@ -1,13 +1,13 @@
 from flask import Flask, url_for, request, jsonify, redirect
 import hashlib
 from random import randrange
-#from YarpTp import YarpTp
+from YarpTp import YarpTp
 
 app = Flask(__name__)
 
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 app.one_request = True
-#app.proto = None
+app.proto = None
 app.base_url = '/api/v1'
 app.token = None
 
@@ -17,89 +17,89 @@ def execute(direc, sp, mot, tm=0):
         if sp is None:
             if tm == 0:
                 if mot == 'left':
-                    #app.proto.ForwardMotorL()
+                    app.proto.ForwardMotorL()
                     return jsonify(code=200, message='Moving ' + mot + ' motor - ' + direc)
                 elif mot == 'right':
-                    #app.proto.ForwardMotorR()
+                    app.proto.ForwardMotorR()
                     return jsonify(code=200, message='Moving ' + mot + ' motor - ' + direc)
                 else:
-                    #app.proto.ForwardBoth()
+                    app.proto.Forward()
                     return jsonify(code=200, message='Moving both motors  - ' + direc)
             else:
                 if mot == 'left':
-                    #app.proto.ForwardMotorL(tm)
+                    app.proto.ForwardMotorL(tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor - ' + direc + ' during ' + str(tm) + ' seconds')
                 elif mot == 'right':
-                    #app.proto.ForwardMotorR(tm)
+                    app.proto.ForwardMotorR(tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor - ' + direc + ' during ' + str(tm) + ' seconds')
                 else:
-                    #app.proto.ForwardBoth(tm)
+                    app.proto.Forward(tm)
 
                     return jsonify(code=200, message='Moving both motors  - ' + direc + ' during ' + str(tm) + ' seconds')
         else:
             if tm == 0:
                 if mot == 'left':
-                    #app.proto.ForwardMotorL(sp)
+                    app.proto.ForwardMotorL(sp)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp))
                 elif mot == 'right':
-                    #app.proto.ForwardMotorR(sp)
+                    app.proto.ForwardMotorR(sp)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp))
                 else:
-                    #app.proto.ForwardBoth(sp)
+                    app.proto.Forward(sp)
                     return jsonify(code=200, message='Moving both motors  - ' + direc + ' with speed ' + str(sp))
             else:
                 if mot == 'left':
-                    #app.proto.ForwardMotorL(sp, tm)
+                    app.proto.ForwardMotorL(sp, tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp) + ' during ' + str(tm) + ' seconds')
                 elif mot == 'right':
-                    #app.proto.ForwardMotorR(sp, tm)
+                    app.proto.ForwardMotorR(sp, tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp) + ' during ' + str(tm) + ' seconds')
                 else:
-                    #app.proto.ForwardBoth(sp, tm)
+                    app.proto.Forward(sp, tm)
                     print("IM IN EXECUTE")
                     return jsonify(message="Moving both motors  - " + direc + " with speed " + str(sp) + " during " + str(tm) + " seconds")
     elif direc == 'reverse':
         if sp is None:
             if tm == 0:
                 if mot == 'left':
-                    #app.proto.ReverseMotorL()
+                    app.proto.ReverseMotorL()
                     return jsonify(code=200, message='Moving ' + mot + ' motor - ' + direc)
                 elif mot == 'right':
-                    #app.proto.ReverseMotorR()
+                    app.proto.ReverseMotorR()
                     return jsonify(code=200, message='Moving ' + mot + ' motor - ' + direc)
                 else:
-                    #app.proto.ReverseBoth()
+                    app.proto.Reverse()
                     return jsonify(code=200, message='Moving both motors  - ' + direc)
             else:
                 if mot == 'left':
-                    #app.proto.ReverseMotorL(tm)
+                    app.proto.ReverseMotorL(tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor - ' + direc + ' during ' + str(tm) + ' seconds')
                 elif mot == 'right':
-                    #app.proto.ReverseMotorR(tm)
+                    app.proto.ReverseMotorR(tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor - ' + direc + ' during ' + str(tm) + ' seconds')
                 else:
-                    #app.proto.ReverseBoth(tm)
+                    app.proto.Reverse(tm)
                     return jsonify(code=200, message='Moving both motors  - ' + direc + ' during ' + str(tm) + ' seconds')
         else:
             if tm == 0:
                 if mot == 'left':
-                    #app.proto.ReverseMotorL(sp)
+                    app.proto.ReverseMotorL(sp)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp))
                 elif mot == 'right':
-                    #app.proto.ReverseMotorR(sp)
+                    app.proto.ReverseMotorR(sp)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp))
                 else:
-                    #app.proto.ReverseBoth(sp)
+                    app.proto.Reverse(sp)
                     return jsonify(code=200, message='Moving both motors  - ' + direc + ' with speed ' + str(sp))
             else:
                 if mot == 'left':
-                    #app.proto.ReverseMotorL(sp, tm)
+                    app.proto.ReverseMotorL(sp, tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp) + ' during ' + str(tm) + ' seconds')
                 elif mot == 'right':
-                    #app.proto.ReverseMotorR(sp, tm)
+                    app.proto.ReverseMotorR(sp, tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp) + ' during ' + str(tm) + ' seconds')
                 else:
-                    #app.proto.ReverseBoth(sp, tm)
+                    app.proto.Reverse(sp, tm)
                     return jsonify(code=200, message='Moving both motors  - ' + direc + ' with speed ' + str(sp) + ' during ' + str(tm) + ' seconds')
     else:
         return jsonify(code=400, message="SOY TU TORMENTO")
@@ -126,7 +126,7 @@ def login():
         gen = hashlib.md5(str(randrange(2**15)).encode()).hexdigest()
         app.token = str(gen)
         app.one_request = False
-        # app.proto = YarpTp()
+        app.proto = YarpTp()
     if not app.one_request:
         try:
             return jsonify(code=200, token=app.token)
@@ -254,10 +254,10 @@ def turns(side):
     tk = request.args.get('token')
     if tk == app.token:
         if side == 'left':
-            #app.proto.TurnLeft()
+            app.proto.TurnLeft()
             return jsonify(code=200, message='Turning left the robot')
         elif side == 'right':
-            #app.proto.TurnRight()
+            app.proto.TurnRight()
             return jsonify(code=200, message='Turning right the robot')
         else:
             return jsonify(code=400, message='You are using a wrong turn instruction. Please, go to the documentation for help')
@@ -272,10 +272,10 @@ def step(direction):
     tk = request.args.get('token')
     if tk == app.token:
         if direction == 'forward':
-            #app.proto.ForwardStep()
+            app.proto.ForwardStep()
             return jsonify(code=200, message='Moving one step in forward')
         elif direction == 'reverse':
-            #app.proto.ReverseStep()
+            app.proto.ReverseStep()
             return jsonify(code=200, message='Moving one step in reverse')
         else:
             return jsonify(code=400, message='You are using a wrong direction instruction. Please, go to the documentation for help')
@@ -285,28 +285,11 @@ def step(direction):
                        url=url_for('login'))
 
 
-"""
-        if motor is None:
-            #app.proto.Stop()
-            return jsonify(code=200, message='Stopping both motors')
-        elif motor == 'left':
-            #app.proto.StopMotorL()
-            return jsonify(code=200, message='Stopping left motor')
-        elif motor == 'right':
-            #app.proto.StopMotorR()
-            return jsonify(code=200, message='Stopping right motor')
-        else:
-            return jsonify(code=404, message='This action does not exist. Please, go to the documentation for help')
-"""
-
-
-# @app.route(app.base_url + '/stop/<motor>')
-# def stop(motor=None):
 @app.route(app.base_url + '/stop')
 def stop():
     tk = request.args.get('token')
     if tk == app.token:
-        #app.proto.Stop()
+        app.proto.Stop()
         return jsonify(code=200, message='Stopping motors')
     else:
         return jsonify(code=401,
@@ -319,6 +302,7 @@ def logout():
     tk = request.args.get('token')
     if tk == app.token:
         # remove the username from the session if it's there
+        app.proto = None
         app.one_request = True
         app.token = None
         return jsonify(code=200, message='You have logged out')
