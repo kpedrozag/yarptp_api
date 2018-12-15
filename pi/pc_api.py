@@ -1,7 +1,5 @@
-"""
-This is the code for API testing in
-a PC or non Arch Raspberry Pi device
-"""
+#!/usr/bin/python3
+
 from flask import Flask, url_for, request, jsonify, redirect
 import hashlib
 from random import randrange
@@ -31,36 +29,36 @@ def execute(direc, sp, mot, tm=0):
                     return jsonify(code=200, message='Moving both motors  - ' + direc)
             else:
                 if mot == 'left':
-                    # app.proto.ForwardMotorL(tm)
+                    # app.proto.ForwardMotorL(tm=tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor - ' + direc + ' during ' + str(tm) + ' seconds')
                 elif mot == 'right':
-                    # app.proto.ForwardMotorR(tm)
+                    # app.proto.ForwardMotorR(tm=tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor - ' + direc + ' during ' + str(tm) + ' seconds')
                 else:
-                    # app.proto.Forward(tm)
-
+                    # app.proto.Forward(tm=tm)
                     return jsonify(code=200, message='Moving both motors  - ' + direc + ' during ' + str(tm) + ' seconds')
         else:
             if tm == 0:
                 if mot == 'left':
-                    # app.proto.ForwardMotorL(sp)
+                    # app.proto.ForwardMotorL(speed=sp)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp))
                 elif mot == 'right':
-                    # app.proto.ForwardMotorR(sp)
+                    # app.proto.ForwardMotorR(speed=sp)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp))
                 else:
-                    # app.proto.Forward(sp)
+                    # app.proto.Forward(speed=sp)
                     return jsonify(code=200, message='Moving both motors  - ' + direc + ' with speed ' + str(sp))
             else:
                 if mot == 'left':
-                    # app.proto.ForwardMotorL(sp, tm)
+                    # app.proto.ForwardMotorL(speed=sp, tm=tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp) + ' during ' + str(tm) + ' seconds')
                 elif mot == 'right':
-                    # app.proto.ForwardMotorR(sp, tm)
+                    # app.proto.ForwardMotorR(speed=sp, tm=tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp) + ' during ' + str(tm) + ' seconds')
                 else:
-                    # app.proto.Forward(sp, tm)
-                    return jsonify(message="Moving both motors  - " + direc + " with speed " + str(sp) + " during " + str(tm) + " seconds")
+                    # app.proto.Forward(speed=sp, tm=tm)
+                    print("IM IN EXECUTE")
+                    return jsonify(code=200, message="Moving both motors  - " + direc + " with speed " + str(sp) + " during " + str(tm) + " seconds")
     elif direc == 'reverse':
         if sp is None:
             if tm == 0:
@@ -75,34 +73,34 @@ def execute(direc, sp, mot, tm=0):
                     return jsonify(code=200, message='Moving both motors  - ' + direc)
             else:
                 if mot == 'left':
-                    # app.proto.ReverseMotorL(tm)
+                    # app.proto.ReverseMotorL(tm=tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor - ' + direc + ' during ' + str(tm) + ' seconds')
                 elif mot == 'right':
-                    # app.proto.ReverseMotorR(tm)
+                    # app.proto.ReverseMotorR(tm=tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor - ' + direc + ' during ' + str(tm) + ' seconds')
                 else:
-                    # app.proto.Reverse(tm)
+                    # app.proto.Reverse(tm=tm)
                     return jsonify(code=200, message='Moving both motors  - ' + direc + ' during ' + str(tm) + ' seconds')
         else:
             if tm == 0:
                 if mot == 'left':
-                    # app.proto.ReverseMotorL(sp)
+                    # app.proto.ReverseMotorL(speed=sp)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp))
                 elif mot == 'right':
-                    # app.proto.ReverseMotorR(sp)
+                    # app.proto.ReverseMotorR(speed=sp)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp))
                 else:
-                    # app.proto.Reverse(sp)
+                    # app.proto.Reverse(speed=sp)
                     return jsonify(code=200, message='Moving both motors  - ' + direc + ' with speed ' + str(sp))
             else:
                 if mot == 'left':
-                    # app.proto.ReverseMotorL(sp, tm)
+                    # app.proto.ReverseMotorL(speed=sp, tm=tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp) + ' during ' + str(tm) + ' seconds')
                 elif mot == 'right':
-                    # app.proto.ReverseMotorR(sp, tm)
+                    # app.proto.ReverseMotorR(speed=sp, tm=tm)
                     return jsonify(code=200, message='Moving ' + mot + ' motor  - ' + direc + ' with speed ' + str(sp) + ' during ' + str(tm) + ' seconds')
                 else:
-                    # app.proto.Reverse(sp, tm)
+                    # app.proto.Reverse(speed=sp, tm=tm)
                     return jsonify(code=200, message='Moving both motors  - ' + direc + ' with speed ' + str(sp) + ' during ' + str(tm) + ' seconds')
     else:
         return jsonify(code=400, message="SOY TU TORMENTO")
@@ -124,7 +122,6 @@ def index():
 
 @app.route(app.base_url + '/login')
 def login():
-    print(app.one_request, app.token)
     if app.one_request:
         # Primer usuario
         gen = hashlib.md5(str(randrange(2**15)).encode()).hexdigest()
@@ -138,28 +135,6 @@ def login():
             return jsonify(code=403, message='There is already a logged user')
 
 
-def go_move(m, d, s, t):
-    if m == 'left' and d == 'forward':
-        return execute(mot=m, direc=d, sp=s, tm=t)
-    elif m == 'left' and d == 'reverse':
-        return execute(mot=m, direc=d, sp=s, tm=t)
-    elif m == 'right' and d == 'forward':
-        return execute(mot=m, direc=d, sp=s, tm=t)
-    elif m == 'right' and d == 'reverse':
-        return execute(mot=m, direc=d, sp=s, tm=t)
-    elif m == 'both' and d == 'forward':
-        return execute(mot=m, direc=d, sp=s, tm=t)
-    elif m == 'both' and d == 'reverse':
-        return execute(mot=m, direc=d, sp=s, tm=t)
-    else:
-        if m not in ['left', 'right', 'both'] and d in ['forward', 'reverse']:
-            return jsonify(code=400, message='You are using a wrong motor instruction. Please, go to the documentation for help')
-        elif m in ['left', 'right', 'both'] and d not in ['forward', 'reverse']:
-            return jsonify(code=400, message='You are using a wrong direction instruction. Please, go to the documentation for help')
-        else:
-            return jsonify(code=404, message='This action does not exist. Please, go to the documentation for help')
-
-
 @app.route(app.base_url + '/move/<string:motor>/<string:direction>')
 @app.route(app.base_url + '/move/<string:motor>/<string:direction>/<float:time>')
 @app.route(app.base_url + '/move/<string:motor>/<string:direction>/<int:speed>')
@@ -167,19 +142,109 @@ def go_move(m, d, s, t):
 def movement(motor, direction, speed=None, time=0):
     tk = request.args.get('token')
     if tk == app.token:
+        print(app.token)
+        print(motor, type(motor))
+        print(direction, type(direction))
+        print(time, type(time))
+        print(speed, type(speed))
         if speed is not None:
             if not (0 <= speed <= 100):
                 return jsonify(code=400, message='Wrong value of speed. Speed must be a float value between 0 and 100.')
             else:
-                return go_move(motor, direction, speed, time)
+                if motor == 'left' and direction == 'forward':
+                    print(motor, direction)
+                    return execute(mot=motor, direc=direction, sp=speed, tm=time)
+                elif motor == 'left' and direction == 'reverse':
+                    print(motor, direction)
+                    return execute(mot=motor, direc=direction, sp=speed, tm=time)
+                elif motor == 'right' and direction == 'forward':
+                    print(motor, direction)
+                    return execute(mot=motor, direc=direction, sp=speed, tm=time)
+                elif motor == 'right' and direction == 'reverse':
+                    print(motor, direction)
+                    return execute(mot=motor, direc=direction, sp=speed, tm=time)
+                elif motor == 'both' and direction == 'forward':
+                    print(motor, direction)
+                    return execute(mot=motor, direc=direction, sp=speed, tm=time)
+                elif motor == 'both' and direction == 'reverse':
+                    print(motor, direction)
+                    return execute(mot=motor, direc=direction, sp=speed, tm=time)
+                else:
+                    if motor not in ['left', 'right', 'both'] and direction in ['forward', 'reverse']:
+                        print("error1")
+                        return jsonify(code=400, message='You are using a wrong motor instruction. Please, go to the documentation for help')
+                    elif motor in ['left', 'right', 'both'] and direction not in ['forward', 'reverse']:
+                        print("error2")
+                        return jsonify(code=400, message='You are using a wrong direction instruction. Please, go to the documentation for help')
+                    else:
+                        print("error3")
+                        return jsonify(code=404, message='This action does not exist. Please, go to the documentation for help')
         elif time != 0:
             if time <= 0:
                 return jsonify(code=400, message='Wrong value of time. Time must be a integer value greater than 0.')
             else:
-                return go_move(motor, direction, speed, time)
+                if motor == 'left' and direction == 'forward':
+                    print(motor, direction)
+                    return execute(mot=motor, direc=direction, sp=speed, tm=time)
+                elif motor == 'left' and direction == 'reverse':
+                    print(motor, direction)
+                    return execute(mot=motor, direc=direction, sp=speed, tm=time)
+                elif motor == 'right' and direction == 'forward':
+                    print(motor, direction)
+                    return execute(mot=motor, direc=direction, sp=speed, tm=time)
+                elif motor == 'right' and direction == 'reverse':
+                    print(motor, direction)
+                    return execute(mot=motor, direc=direction, sp=speed, tm=time)
+                elif motor == 'both' and direction == 'forward':
+                    print(motor, direction)
+                    return execute(mot=motor, direc=direction, sp=speed, tm=time)
+                elif motor == 'both' and direction == 'reverse':
+                    print(motor, direction)
+                    return execute(mot=motor, direc=direction, sp=speed, tm=time)
+                else:
+                    if motor not in ['left', 'right', 'both'] and direction in ['forward', 'reverse']:
+                        print("error1")
+                        return jsonify(code=400, message='You are using a wrong motor instruction. Please, go to the documentation for help')
+                    elif motor in ['left', 'right', 'both'] and direction not in ['forward', 'reverse']:
+                        print("error2")
+                        return jsonify(code=400, message='You are using a wrong direction instruction. Please, go to the documentation for help')
+                    else:
+                        print("error3")
+                        return jsonify(code=404, message='This action does not exist. Please, go to the documentation for help')
         else:
-            return go_move(motor, direction, speed, time)
+            print("ELEGIR")
+            if motor == 'left' and direction == 'forward':
+                print(motor, direction)
+                return execute(mot=motor, direc=direction, sp=speed, tm=time)
+            elif motor == 'left' and direction == 'reverse':
+                print(motor, direction)
+                return execute(mot=motor, direc=direction, sp=speed, tm=time)
+            elif motor == 'right' and direction == 'forward':
+                print(motor, direction)
+                return execute(mot=motor, direc=direction, sp=speed, tm=time)
+            elif motor == 'right' and direction == 'reverse':
+                print(motor, direction)
+                return execute(mot=motor, direc=direction, sp=speed, tm=time)
+            elif motor == 'both' and direction == 'forward':
+                print(motor, direction)
+                return execute(mot=motor, direc=direction, sp=speed, tm=time)
+            elif motor == 'both' and direction == 'reverse':
+                print(motor, direction)
+                return execute(mot=motor, direc=direction, sp=speed, tm=time)
+            else:
+                if motor not in ['left', 'right', 'both'] and direction in ['forward', 'reverse']:
+                    print("error1")
+                    return jsonify(code=400, message='You are using a wrong motor instruction. Please, go to the documentation for help')
+                elif motor in ['left', 'right', 'both'] and direction not in ['forward', 'reverse']:
+                    print("error2")
+                    return jsonify(code=400, message='You are using a wrong direction instruction. Please, go to the documentation for help')
+                else:
+                    print("error3")
+                    return jsonify(code=404, message='This action does not exist. Please, go to the documentation for help')
+            print("El else donde se eligen")
+        print("PASE")
     else:
+        print("error no auth")
         return jsonify(code=401,
                        message='You are unauthorized to perform this action. Please, Log in in the URL',
                        url=url_for('login'))
@@ -235,19 +300,15 @@ def stop():
 
 @app.route(app.base_url + '/logout')
 def logout():
-    print(app.one_request, app.token)
     tk = request.args.get('token')
     if tk == app.token:
         # remove the username from the session if it's there
-        # app.proto = None
         app.one_request = True
         app.token = None
-        print(app.one_request, app.token)
+        # app.proto = None
         return jsonify(code=200, message='You have logged out')
     else:
-        return jsonify(code=401,
-                       message='You are unauthorized to perform this action. Please, Log in in the URL',
-                       url=url_for('login'))
+        return jsonify(code=403, message='There is no logged user')
 
 
 if __name__ == '__main__':

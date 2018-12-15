@@ -1,2 +1,5 @@
+.idea
 docs/
 rest_api/
+
+pi_api.py
